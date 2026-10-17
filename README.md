@@ -18,3 +18,10 @@ Solar declination is needed for calculating sunrise, sunset, and solar position.
 ## Edge case
 
 The approximation treats the year as having 365 days in the sine argument, which causes a slight shift in leap years. The implementation uses the actual day-of-year, so the result on a given calendar date is consistent, but the declination on March 1 in a leap year will be about 0.4 degrees less than in a non-leap year.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
